@@ -24,5 +24,14 @@ model User {
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @updatedAt
   chatrooms          ChatRoom[] @relation("ChatroomUser")
-  messages           message[]
+  messages           Mmessage[]
+}
+
+model ChatRoom {
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  users     User[]    @relation("ChatroomUser")
+  messages  Message[]
 }
