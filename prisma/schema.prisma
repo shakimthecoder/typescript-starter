@@ -44,6 +44,8 @@ model Message {
   chatRoomId Int
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  user User @relation(fields: [userId], references[id], onDelete: Cascade)
-  chatroom Chatroom @relation(fields: cbatroomId], references[id], onDelete: Cascade)
+
+  User User[]
+
+  ChatRoom ChatRoom[]
 }

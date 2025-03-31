@@ -14,9 +14,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
       imports: [ConfigModule, AppModule],
       inject: [ConfigService],
       driver: ApolloDriver,
-      useFactory: async (
-        configService: ConfigService,
-      ) => {
+      useFactory: async (configService: ConfigService,) => {
         return {
           playground: true,
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -24,6 +22,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
         };
       },
     }),
+    ConfigModule.forRoot({
+      isGlobal: true
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
