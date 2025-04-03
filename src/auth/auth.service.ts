@@ -25,7 +25,19 @@ export class AuthService {
             throw new UnauthorizedException('Invalid or expired refresh token');
            }
            const userExists = await this.prisma.user.findUnique({
-            where: { id.payload.sub}
+            where: { id: payload.sub },
          });
+         if(!userExists){
+            throw new UnauthorizedException('User no longer exists');
+         }
+         const expiresIn = 15000;
+         const expiration = Math.floor(Date.now() / 1000)+expiresIn;
+         const accessToken = this.jwtService.sign(
+            {   ...payload, exp: expiration },
+            {
+                secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
+            }
+            
+         )
         }
     }
