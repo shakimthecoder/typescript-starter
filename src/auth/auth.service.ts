@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt'
 import { PrismaService } from 'src/prisma.service';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 @Injectable()
 export class AuthService {
     constructor(
@@ -36,8 +36,9 @@ export class AuthService {
             {   ...payload, exp: expiration },
             {
                 secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
-            }
-            
-         )
+            }     
+         );
+         res.cookie('access_token', accessToken, { httpOnly: true });
+         return accessToken;
         }
     }
