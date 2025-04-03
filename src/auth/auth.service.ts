@@ -23,7 +23,9 @@ export class AuthService {
                })
            } catch (error) {
             throw new UnauthorizedException('Invalid or expired refresh token');
-
            }
+           const userExists = await this.prisma.user.findUnique({
+            where: { id.payload.sub}
+         });
         }
     }
