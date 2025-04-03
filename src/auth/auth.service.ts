@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt'
 import { PrismaService } from 'src/prisma.service';
 import { Request, Response } from 'express';
 import { User } from '@prisma/client';
-import { LoginDto } from './dto';
+import { LoginDto, RegisterDto } from './dto';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
@@ -70,5 +70,13 @@ export class AuthService {
                 return user;
             }
             return null;
+        }
+        async registerUser(registerDto: RegisterDto, res: Response){
+            const existingUser = await this.prisma.user.findUnique({ 
+                where: { email: registerDto.email }
+            });
+            if(existingUser){
+                throw new UnauthorizedException('Email already in use')
+            }
         }
     }
