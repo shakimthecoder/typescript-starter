@@ -7,6 +7,7 @@ export class UserService {
         private readonly prisma: PrismaService,
     ){ }
     async updateProfile(userId: number, fullname: string, avatarUrl: string){
+        if(avatarUrl) {
         return await this.prisma.user.update({
             where: { id: userId },
             data: {
@@ -14,5 +15,14 @@ export class UserService {
                 avatarUrl
             }
         })
+    }      
+   return await this.prisma.user.update({
+    where: { id: userId },
+    data: {
+        fullname, 
+        
     }
+  })
 }
+}
+
