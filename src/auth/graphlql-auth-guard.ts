@@ -11,6 +11,13 @@ export class GraphQLAuthGuard implements CanActivate {
 
     ){}
     async canActivate(context: ExecutionContext): Promise<boolean> {
+        const gqlCtx = context.getArgByIndex(2);
+        const request: Request = gqlCtx.req;
+        const token = this.extractTokenFromCookie(request);
+
+        if(!token){
+            throw new UnauthorizedException;
+        }
 
     }
 }
