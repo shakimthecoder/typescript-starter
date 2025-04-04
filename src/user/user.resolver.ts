@@ -25,4 +25,14 @@ export class UserResolver {
             const userId = context.req.user.sub;
             return this.userService.updateProfile(userId, fullname, imageUrl)
         }
+        private storeImageAndGetUrl(file: GraphQlUploadExpress.file) {
+            const { createReadStream, filename } = file;
+            const uniqueFilename = `${uuidv4()}-${filename}`;
+            const imagePath = join(process.cwd(), 'public', uniqueFilename);
+            const imageUrl = `${process.env.APP_URL}/${uniqueFilename}`;
+            const readStream = createReadStream();
+            readStream.pipe(createWriteStream(imagePath));
+            return imageUrl;
+            
+        }
 }
