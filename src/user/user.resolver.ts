@@ -21,7 +21,8 @@ export class UserResolver {
         @Args('file', { type: () => GraphQlUploadExpress.GraphQLUpload, nullable: true})
         file: GraphQlUploadExpress.file,
         @Context() context: { req: Request } , ) {
-            const imageUrl = file ? 
+            const imageUrl = file ? await this.storeImageAndGetUrl(file): null;
+            const userId = context.req.user.sub;
+            return this.userService.updateProfile(userId, fullname, imageUrl)
         }
-    )
 }
