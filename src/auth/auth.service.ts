@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt'
 import { PrismaService } from 'src/prisma.service';
@@ -83,9 +83,24 @@ export class AuthService {
                 data: {
                     fullname: registerDto.fullname,
                     password: hashedPassword,
-                    email: registerDto.email
+                    email: registerDto.email,
+                    remmberToken: '' // Add the 'remmberToken' property with an empty string value
                 },
             })
             return this.issueTokens(user, res);
         }
-    }
+             async login(loginDto: LoginDto, res: Response) {
+                const user = await this.validateUser(loginDto);
+                if(!user){
+                    throw new BadRequestException({
+                        invalidCredentials: 'Invalid credentials'
+                    }); // Add a closing parenthesis here
+                }
+               return this.issueTokens(user, res);
+             }
+             async logout(res: Response) {
+                res.clearCookie('access_token');
+                res.clearCookie('refresh_token');
+                return 'Successfully logged out'
+             }
+        }
