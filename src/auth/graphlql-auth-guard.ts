@@ -22,8 +22,11 @@ export class GraphQLAuthGuard implements CanActivate {
             const payload = await this.jwtService.verifyAsync(token, {
                 secret: this.configService.get<string>('ACCESS_TOKEN_SECRET')
             })
-
-        } catch () {}
+            console.log('payload', token)
+        } catch (error) {
+            console.log('error', error);
+            throw new UnauthorizedException('Invalid or expired access token');
+        }
 
     }
 }
