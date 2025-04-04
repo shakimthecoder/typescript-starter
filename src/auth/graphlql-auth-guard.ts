@@ -31,4 +31,8 @@ export class GraphQLAuthGuard implements CanActivate {
         return true;
 
     }
+
+    private extractTokenFromCookie(request: Request): string | null {
+        return request.cookies?.access_token;
+    }
 }
